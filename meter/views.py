@@ -15,6 +15,10 @@ class MeterViewSet(viewsets.ModelViewSet):
 
 	queryset = Meter.objects.all()
 	serializer_class = MeterSerializer
+        def get_queryset(self):       
+            qs = super(MeterViewSet, self).get_queryset()
+#            qs = qs.filter()
+            return qs 
 	
 class MeterLogViewSet(viewsets.ModelViewSet):
 	queryset = MeterLog.objects.all()

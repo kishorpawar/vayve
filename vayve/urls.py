@@ -20,8 +20,8 @@ from rest_framework import routers
 from meter import views
 
 router = routers.DefaultRouter()
-router.register(r'logs', views.MeterViewSet)
-router.register(r'log/details/', views.MeterLogViewSet)
+router.register(r'logs', views.MeterViewSet, base_name='logs')
+router.register(r'log/details/', views.MeterLogViewSet, base_name='log-details')
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
