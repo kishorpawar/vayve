@@ -38,14 +38,12 @@ class ListMeterLogs(APIView):
 		logs = MeterLog.objects \
 						.filter(meter=meter_obj) \
 						.order_by('sequence_id')
-		print logs
 		for log in logs:
 			if log.status == "Connected":
 				start = log.event_date
 			else:
 				result.append([start, log.event_date])
 				start = None
-			# print log.status, log.event_date
 		return Response(result, status=200)
 	
 class MeterLogViewSet(viewsets.ModelViewSet):
