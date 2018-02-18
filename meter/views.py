@@ -40,7 +40,8 @@ class ListMeterLogs(APIView):
 						.order_by('sequence_id')
 		for log in logs:
 			if log.status == "Connected":
-				start = log.event_date
+				if start is None:
+				    start = log.event_date
 			else:
 				result.append([start, log.event_date])
 				start = None
