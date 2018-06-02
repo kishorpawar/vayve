@@ -17,36 +17,28 @@ class ListMeterLogs(APIView):
 		API endpoint that returns Meter connection status 
 	"""
 
-	# queryset = Meter.objects.all()
-	# serializer_class = MeterSerializer
-	
-	# def get_queryset(self):
-	#     qs = super(MeterViewSet, self).get_queryset()
-	#     qs = qs.annotate(
-	#     		# connected = Case(When(status = 'C', then='event_date')),
-	#     		# # disconnected = Case(When(status = 'D', then='event_date'))
-	#     		connected = Count('meter_logs__status'),
-	#     		disconnected = Count('meter_logs__status')
-	#     	)	
-	#     return qs
-
 	def get(self, request, format=None):
 		start = None
 		result = []
 		meter = request.query_params.get("meter")
-		meter_obj = Meter.objects.get(meter_id=meter)
-		logs = MeterLog.objects \
-						.filter(meter=meter_obj) \
-						.order_by('sequence_id')
-		for log in logs:
-			if log.status == "Connected":
-				if start is None:
-				    start = log.event_date
-			else:
-				result.append([start, log.event_date])
-				start = None
+		if meter:
+			meter_obj = Meter.objects.get(meter_id=meter)
+			logs = MeterLog.objects \
+							.filter(meter=meter_obj) \
+							.order_by('sequence_id')
+			for log in logs:
+				if log.status == "Connected":
+					if start is None:
+					    start = log.event_date
+				else:
+					result.append(
+						{
+							"connected_time" : start, 
+							"disconnected_time" : log.event_date,
+							"sequence_id" : log.sequence_id
+						})
+					start = None
+		else:
+			result = """Please try using following format. merters/?meter=<meter_id>"""
+					
 		return Response(result, status=200)
-	
-class MeterLogViewSet(viewsets.ModelViewSet):
-	queryset = MeterLog.objects.all()
-	serializer_class = MeterLogSerializer

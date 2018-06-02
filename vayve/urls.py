@@ -21,7 +21,7 @@ from meter import views
 
 router = routers.DefaultRouter()
 router.register(r'meters', views.ListMeterLogs, base_name="meter-logs")
-router.register(r'logs', views.MeterLogViewSet)
+# router.register(r'logs', views.MeterLogViewSet)
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
